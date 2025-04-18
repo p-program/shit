@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>关注个人拉屎健康</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      height: 300px;
+      width: 100%;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+
+    .circle {
+      flex: 0 0 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .circle-shape {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: #FFF9C4;
+      /* 初始浅黄色 */
+      transition: background-color 0.3s ease;
+    }
+
+    .scroll-area {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 20px;
+    }
+
+    .scroll-content {
+      height: 800px;
+      /* 需要足够高才能滚动 */
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="circle">
+      <div class="circle-shape" id="circle"></div>
+    </div>
+    <div class="scroll-area" id="scrollArea">
+      <div class="scroll-content">
+        <p>往下滚动，一共4种颜色</p>
+        <p>最浅的表示一泻千里（拉稀）</p>
+        <p>最深的表示拉不出屎</p>
+        <p>点击圆形提交今日拉屎数据</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const circle = document.getElementById('circle');
+    const scrollArea = document.getElementById('scrollArea');
+
+    const colors = [
+      '#FFF9C4', // 浅黄色
+      '#FFF176', // 正黄色
+      '#FFD54F', // 深黄色
+      '#FFC107'  // 更深的黄色
+    ];
+
+    let index = 0
+
+    // 监听滚动事件
+    scrollArea.addEventListener('scroll', () => {
+      const scrollTop = scrollArea.scrollTop;
+      const maxScroll = scrollArea.scrollHeight - scrollArea.clientHeight;
+      const percent = scrollTop / maxScroll;
+
+      // 计算当前颜色阶段
+      index = Math.floor(percent * colors.length);
+      if (index >= colors.length) index = colors.length - 1;
+
+      circle.style.backgroundColor = colors[index];
+    });
+
+
+    circle.addEventListener('click', function (event) {
+      console.log(index + "圆形被点击了");
+      sendSmoothness(index);
+    });
+
+    // 发送 POST 请求函数
+    function sendSmoothness(level) {
+      const dict = {
+        0: "diarrhea",
+        1: "normal",
+        2: "hardly",
+        3: "blocked"
+      };
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:8080/shit", true);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.onreadystatechange = function () {
+        console.log("响应内容: ", xhr.responseText);
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          alert("今天拉屎了耶");
+        }
+      };
+      xhr.send(JSON.stringify({ smoothness: dict[level] }));
+    }
+  </script>
+
+</body>
+
+</html>
