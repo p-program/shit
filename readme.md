@@ -3,6 +3,8 @@
 
 docker compose up --build
 
+关注个人拉屎健康：
+![img](/doc/mac.png)
 
 ## 原始需求文档
 
