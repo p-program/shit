@@ -84,6 +84,12 @@
     let index = 1;
     circle.style.backgroundColor = colors[index];
 
+    window.onload = function() {
+      const maxScroll = scrollArea.scrollHeight - scrollArea.clientHeight;
+      scrollArea.scrollTop = (index / (colors.length - 1)) * maxScroll;
+      document.getElementById('status').innerText = "当前状态: " + dict[index];
+    };
+
     // 监听滚动事件
     scrollArea.addEventListener('scroll', () => {
       const scrollTop = scrollArea.scrollTop;
@@ -104,15 +110,15 @@
       document.getElementById('status').innerText = "当前状态: " + dict[index];
       sendSmoothness(index);
     });
- const dict = {
-        0: "diarrhea",
-        1: "normal",
-        2: "hardly",
-        3: "blocked"
-      };
+    const dict = {
+      0: "diarrhea",
+      1: "normal",
+      2: "hardly",
+      3: "blocked"
+    };
     // 发送 POST 请求函数
     function sendSmoothness(level) {
-     
+
 
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "http://localhost:8080/shit", true);
