@@ -17,3 +17,6 @@ build:
 
 bbuild:
 	go build
+
+down:
+	docker compose down
