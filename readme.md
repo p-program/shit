@@ -1,8 +1,6 @@
 
 # 用 AI-Driven Design 打造科学拉屎click house数据库
 
-docker compose up --build
-
 关注个人拉屎健康：
 ![img](/doc/mac.png)
 
@@ -186,7 +184,7 @@ shit方法实现对click house 数据库表shit.toilet_log 的写入
 写一个docker-compose.yml,把这个gin的web项目，联通 click house 一起启动
 ```
 
-微调一下内容结果，启动就行了。完整项目见[shit]()
+微调一下内容结果，启动就行了。完整项目见[shit](https://github.com/p-program/shit)
 
 ```bash
 docker compose up --build
