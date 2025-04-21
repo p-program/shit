@@ -113,7 +113,7 @@ func initClickHouse() error {
 	var err error
 
 	clickhouseUrl := os.Getenv("CLICKHOUSE_HOST") + ":" + os.Getenv("CLICKHOUSE_PORT")
-	if clickhouseUrl == "" {
+	if clickhouseUrl == ":" {
 		clickhouseUrl = "127.0.0.1:9000"
 	}
 	// clickhouseUser := os.Getenv("CLICKHOUSE_USER")
