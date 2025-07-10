@@ -3,4 +3,4 @@
 
 Day day shit：
 
-![img](/doc/mac.png)
+![img](/doc/shit.png)

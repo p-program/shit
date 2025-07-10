@@ -110,7 +110,8 @@
         deep: "最深的表示拉不出屎",
         submit: "点击圆形提交今日拉屎数据",
         statusLabel: "当前状态",
-        pageTitle: "关注个人拉屎健康"
+        pageTitle: "关注个人拉屎健康",
+        alertSuccess: "今天拉屎了耶"
       },
       'en': {
         scroll: "Scroll down: 4 levels of color",
@@ -118,7 +119,8 @@
         deep: "Darkest color means blocked",
         submit: "Click the circle to submit today's data",
         statusLabel: "Status",
-        pageTitle: "shit"
+        pageTitle: "shit",
+        alertSuccess: "Shit!"
       }
     };
 
@@ -180,7 +182,7 @@
       xhr.onreadystatechange = function () {
         console.log("响应内容: ", xhr.responseText);
         if (xhr.readyState === 4 && xhr.status === 200) {
-          alert("今天拉屎了耶");
+          alert(langText[currentLang].alertSuccess);
         }
       };
       xhr.send(JSON.stringify({ smoothness: dict['en'][level] }));
