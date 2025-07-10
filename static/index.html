@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>关注个人拉屎健康</title>
+  <title></title>
   <style>
     body {
       margin: 0;
@@ -55,17 +55,22 @@
 
 <body>
 
+  <select id="langSelector" style="position: absolute; top: 10px; right: 10px;">
+    <option value="zh-CN">中文</option>
+    <option value="en">English</option>
+  </select>
+
   <div class="container">
     <div class="circle">
       <div class="circle-shape" id="circle"></div>
     </div>
-    <div class="scroll-area" id="scrollArea">
-      <div class="scroll-content">
-        <p style="margin-top:50px;padding-top: 130px;">往下滚动，一共4种颜色</p>
-        <p>最浅的表示一泻千里（拉稀）</p>
+    <div class="scroll-area" id="scrollArea" >
+      <div class="scroll-content" >
+        <p id="text-scroll" style="margin-top:50px;padding-top: 130px;"></p>
+        <p id="text-shallow"></p>
         <p id="status">当前状态：</p>
-        <p>最深的表示拉不出屎</p>
-        <p>点击圆形提交今日拉屎数据</p>
+        <p id="text-deep"></p>
+        <p id="text-submit"></p>
       </div>
     </div>
   </div>
@@ -81,13 +86,63 @@
       '#FFC107'  // 更深的黄色
     ];
 
+    const dict = {
+      'zh-CN': {
+        0: "一泻千里",
+        1: "正常",
+        2: "有点困难",
+        3: "拉不出来"
+      },
+      'en': {
+        0: "diarrhea",
+        1: "normal",
+        2: "hard",
+        3: "blocked"
+      }
+    };
+
+    let currentLang = 'zh-CN';
+
+    const langText = {
+      'zh-CN': {
+        scroll: "往下滚动，一共4种颜色",
+        shallow: "最浅的表示一泻千里（拉稀）",
+        deep: "最深的表示拉不出屎",
+        submit: "点击圆形提交今日拉屎数据",
+        statusLabel: "当前状态",
+        pageTitle: "关注个人拉屎健康"
+      },
+      'en': {
+        scroll: "Scroll down: 4 levels of color",
+        shallow: "Lightest color means diarrhea",
+        deep: "Darkest color means blocked",
+        submit: "Click the circle to submit today's data",
+        statusLabel: "Status",
+        pageTitle: "shit"
+      }
+    };
+
     let index = 1;
     circle.style.backgroundColor = colors[index];
+
+    function updateStatus(i) {
+      document.getElementById('status').innerText = langText[currentLang].statusLabel + ": " + dict[currentLang][i];
+      updateStaticText();
+    }
+
+    function updateStaticText() {
+      document.getElementById('text-scroll').innerText = langText[currentLang].scroll;
+      document.getElementById('text-shallow').innerText = langText[currentLang].shallow;
+      document.getElementById('text-deep').innerText = langText[currentLang].deep;
+      document.getElementById('text-submit').innerText = langText[currentLang].submit;
+    }
 
     window.onload = function() {
       const maxScroll = scrollArea.scrollHeight - scrollArea.clientHeight;
       scrollArea.scrollTop = (index / (colors.length - 1)) * maxScroll;
-      document.getElementById('status').innerText = "当前状态: " + dict[index];
+      updateStatus(index);
+      updateStaticText();
+      document.title = langText[currentLang].pageTitle;
     };
 
     // 监听滚动事件
@@ -101,25 +156,24 @@
       if (index >= colors.length) index = colors.length - 1;
 
       circle.style.backgroundColor = colors[index];
-      document.getElementById('status').innerText = "当前状态: " + dict[index];
+      updateStatus(index);
     });
 
+    document.getElementById('langSelector').addEventListener('change', function () {
+      currentLang = this.value;
+      updateStatus(index);
+      updateStaticText();
+      document.title = langText[currentLang].pageTitle;
+    });
 
     circle.addEventListener('click', function (event) {
       console.log(index + "圆形被点击了");
-      document.getElementById('status').innerText = "当前状态: " + dict[index];
+      updateStatus(index);
       sendSmoothness(index);
     });
-    const dict = {
-      0: "diarrhea",
-      1: "normal",
-      2: "hardly",
-      3: "blocked"
-    };
+
     // 发送 POST 请求函数
     function sendSmoothness(level) {
-
-
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "http://localhost:8080/shit", true);
       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -129,7 +183,7 @@
           alert("今天拉屎了耶");
         }
       };
-      xhr.send(JSON.stringify({ smoothness: dict[level] }));
+      xhr.send(JSON.stringify({ smoothness: dict['en'][level] }));
     }
   </script>
 
