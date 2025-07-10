@@ -1,3 +1,3 @@
-# AI-Driven Design shit click house database
+# AI-Driven Design Shit Click House Database
 
 ![img](/doc/shit.png)
